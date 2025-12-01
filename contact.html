@@ -56,11 +56,63 @@
       <section class="page-content">
         <div class="container">
           <h1>Contact</h1>
-          <p>Get in touch with us for bookings and inquiries.</p>
+          <p class="contact-intro">Ready to elevate your event? Fill out the form below and we'll get back to you soon!</p>
+          <form id="contactForm" class="contact-form" novalidate>
+            <!-- Honeypot -->
+            <div style="display:none;" aria-hidden="true">
+              <label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+            </div>
+            <div class="form-group">
+              <label for="name">Name *</label>
+              <input type="text" id="name" name="name" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone Number *</label>
+              <input type="tel" id="phone" name="phone" required />
+            </div>
+            <div class="form-group">
+              <label for="location">Event Location *</label>
+              <input type="text" id="location" name="location" required />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="eventDate">Event Date *</label>
+                <input type="date" id="eventDate" name="eventDate" required />
+              </div>
+              <div class="form-group">
+                <label for="duration">Duration (hours) *</label>
+                <input type="number" id="duration" name="duration" min="1" step="0.5" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="attendees">Number of Attendees *</label>
+              <input type="number" id="attendees" name="attendees" min="1" required />
+            </div>
+            <div class="form-group">
+              <label for="package">Select Package *</label>
+              <select id="package" name="package" required>
+                <option value="">-- Choose a package --</option>
+                <option value="classico">The Classico</option>
+                <option value="beyond">Al Di La "Beyond"</option>
+                <option value="custom">Custom</option>
+              </select>
+            </div>
+            <div id="menuSelections" class="menu-selections"></div>
+            <div class="form-group">
+              <label for="message">Additional Notes</label>
+              <textarea id="message" name="message" rows="5"></textarea>
+            </div>
+            <button type="submit" class="package-btn submit-btn">Submit Inquiry</button>
+          </form>
         </div>
       </section>
     </main>
 
     <script src="script.js"></script>
+    <script src="contact-form.js"></script>
   </body>
 </html>
