@@ -73,14 +73,38 @@ if ($messageSafe !== '') {
   $body .= "\nAdditional Notes:\n" . html_entity_decode($messageSafe, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . "\n";
 }
 
-$headers = 'From: ' . $email . "\r\n" .
+// Use a domain-safe From to avoid SPF/DMARC rejection; keep user email in Reply-To
+$domainFrom = 'no-reply@lastratamobilecharcuteriebar.com';
+$headers = 'From: La Strata Inquiry <' . $domainFrom . ">\r\n" .
            'Reply-To: ' . $email . "\r\n" .
-           'X-Mailer: PHP/' . phpversion();
+           'X-Mailer: PHP/' . phpversion() . "\r\n" .
+           'Content-Type: text/plain; charset=UTF-8';
+
+// Simple logging setup
+$logLine = date('c') . " | $name | $email | $package | attendees:$attendees | duration:$duration | sent:"; 
 
 $sent = @mail($to, $subject, $body, $headers);
 if ($sent) {
+  // Append success to log
+  @file_put_contents(__DIR__ . '/submission.log', $logLine . "YES\n", FILE_APPEND);
   echo json_encode(['success'=>true,'message'=>'Email sent']);
 } else {
+  // Backup payload to JSONL for manual review
+  $backup = [
+    'ts'=>date('c'),
+    'name'=>$name,
+    'email'=>$email,
+    'phone'=>$phone,
+    'location'=>$location,
+    'eventDate'=>$eventDate,
+    'duration'=>$duration,
+    'attendees'=>$attendees,
+    'package'=>$package,
+    'menuSelections'=>$menuSelRaw,
+    'message'=>$messageRaw
+  ];
+  @file_put_contents(__DIR__ . '/submission_backup.jsonl', json_encode($backup) . "\n", FILE_APPEND);
+  @file_put_contents(__DIR__ . '/submission.log', $logLine . "NO\n", FILE_APPEND);
   http_response_code(500);
-  echo json_encode(['success'=>false,'message'=>'Mail send failed']);
+  echo json_encode(['success'=>false,'message'=>'Mail send failed','hint'=>'Server mail() may be disabled; check submission.log and backup file.']);
 }
