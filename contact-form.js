@@ -69,14 +69,11 @@ function buildMenuSelections(pkg){
 
 packageSelect.addEventListener('change',()=>buildMenuSelections(packageSelect.value));
 
-contactForm.addEventListener('submit', async (e)=>{
-  e.preventDefault();
+// Before native submit, compile menu selections into hidden field.
+contactForm.addEventListener('submit',(e)=>{
   const hp = contactForm.querySelector('input[name="website"]').value;
-  if(hp){return;} // bot/honeypot
-  const submitBtn = contactForm.querySelector('.submit-btn');
-  const originalTxt=submitBtn.textContent;submitBtn.textContent='Sending...';submitBtn.disabled=true;
-  const fd=new FormData(contactForm);
-  const pkg=fd.get('package');
+  if(hp){return;} // bot/honeypot: allow silent drop
+  const pkg = packageSelect.value;
   let selectionsText='';
   if(pkg && menuData[pkg]){
     Object.keys(menuData[pkg]).forEach(cat=>{
@@ -85,21 +82,8 @@ contactForm.addEventListener('submit', async (e)=>{
         selectionsText+=`\n${cat.toUpperCase()}:\n`+checked.map(v=>`  • ${v}`).join('\n')+'\n';
       }
     });
-    if(selectionsText){selectionsText='\n\nMENU SELECTIONS:\n'+selectionsText.trim();}
+    if(selectionsText){selectionsText='MENU SELECTIONS:\n'+selectionsText.trim();}
   }
-  fd.append('menuSelections', selectionsText.trim());
-  try {
-    const resp = await fetch('submit-form.php',{method:'POST',body:fd});
-    const result = await resp.json();
-    if(result.success){
-      alert('Thank you for your inquiry! We\'ll get back to you soon.');
-      contactForm.reset();menuSelectionsDiv.innerHTML='';
-    } else { throw new Error(result.message||'Failed'); }
-  } catch(err){
-    console.error(err);
-    if(confirm('Submission failed. Would you like to email us directly?')){
-      const mailBody=`Please detail your event here. (Form failed)\n\nName: ${fd.get('name')}\nEmail: ${fd.get('email')}\nPhone: ${fd.get('phone')}\nLocation: ${fd.get('location')}\nDate: ${fd.get('eventDate')}\nDuration: ${fd.get('duration')} hours\nAttendees: ${fd.get('attendees')}\nPackage: ${fd.get('package')}\n${selectionsText}`;
-      window.location.href='mailto:lastrata25@gmail.com?subject=Event Inquiry (Fallback)&body='+encodeURIComponent(mailBody);
-    }
-  } finally {submitBtn.textContent=originalTxt;submitBtn.disabled=false;}
+  document.getElementById('menuSelectionsHidden').value = selectionsText.trim();
+  // Let the browser perform the POST to FormSubmit.
 });

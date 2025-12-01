@@ -57,11 +57,16 @@
         <div class="container">
           <h1>Contact</h1>
           <p class="contact-intro">Ready to elevate your event? Fill out the form below and we'll get back to you soon!</p>
-          <form id="contactForm" class="contact-form" novalidate>
+          <form id="contactForm" class="contact-form" method="POST" action="https://formsubmit.co/lastrata25@gmail.com" novalidate>
             <!-- Honeypot -->
             <div style="display:none;" aria-hidden="true">
               <label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
             </div>
+            <input type="hidden" name="_subject" value="New La Strata Event Inquiry" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_template" value="box" />
+            <input type="hidden" name="_next" value="thank-you.html" />
+            <input type="hidden" id="menuSelectionsHidden" name="menuSelections" value="" />
             <div class="form-group">
               <label for="name">Name *</label>
               <input type="text" id="name" name="name" required />
