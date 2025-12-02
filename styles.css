@@ -34,7 +34,8 @@ body{
   align-items:center;
 }
 .logo-link img{
-  height:clamp(56px,7vw,96px);
+  height:clamp(48px,6vw,80px);
+  max-height:calc(100vh - 80px);
   width:auto;
   display:block;
 }
