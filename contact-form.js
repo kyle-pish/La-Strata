@@ -10,7 +10,7 @@ const menuData = {
     fruits: { title: 'Fruits', subtitle: 'Choose 3', items: [
       'Fresh Fruit (Grapes or Seasonal Berries)', 'Dried Fruit (Apricots, Oranges, Figs or Dates)'] },
     bread_crackers: { title: 'Breadsticks or Crackers', subtitle: 'Choose 1', items: [
-      'Breadsticks', 'La Panzanella Artisan Crackers'] },
+      'Breadsticks', 'Crackers'] },
     nuts_olives: { title: 'Mixed Nuts or Olives', subtitle: 'Choose 1', items: [
       'Mixed Nuts', 'Olives'] },
     included: { title: 'Included', subtitle: '', items: [
